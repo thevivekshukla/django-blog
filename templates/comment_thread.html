@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block body %}
+
+
+<div class="col-sm-6 col-sm-offset-3">
+
+  <h1><a href="{{ comment.content_object.get_absolute_url }}">{{ title }}</a></h1>
+
+  <div class="comments">
+
+      <div class="jumbotron">
+        <p class="comment-content">{{ comment.content }}</p>
+        <footer>
+          by <strong>{{ comment.user|capfirst }}</strong>{%if comment.user == comment.content_object.user%}<span class="badge">AUTH</span>{%endif%}
+           | {{ comment.timestamp|timesince }} ago |
+          {% if comment.children %}
+          {{ comment.children.count }} Comment{% if comment.children.count > 1 %}s{%endif%} |
+          {% endif %}
+          {% if comment.user == request.user or request.user.is_superuser or comment.content_object.user == request.user %}
+            <a href="{{ comment.get_delete_url }}">Delete</a>
+          {% endif %}
+        </footer>
+      </div>
+
+
+
+      {% if comment.children %}
+        <div class="comment-reply-thread">
+        {% for child_comment in comment.children %}
+          <blockquote>
+            {{ child_comment.content }}
+            <footer>
+              by <strong>{{ child_comment.user|capfirst }}</strong>{%if child_comment.user == child_comment.content_object.user%}<span class="badge">AUTH</span>{%endif%}
+               | {{ child_comment.timestamp|timesince }} ago
+              {% if child_comment.user == request.user or request.user.is_superuser %}
+              | <a href="{{ child_comment.get_delete_url }}">Delete</a>
+              {% endif %}
+            </footer>
+          </blockquote>
+        {% endfor %}
+      {% endif %}
+
+      </blockquote>
+      <form method="post">
+        {% csrf_token %}
+        {{ comment_form|crispy }}
+        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+        <input class="btn btn-primary" type="submit" value="Reply">
+      </form>
+      </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

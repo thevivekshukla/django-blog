@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block body %}
+
+
+<div class="col-sm-6 col-sm-offset-3">
+  <div class="jumbotron">
+    <form method="post">
+      {% csrf_token %}
+      <p>Do you really want to delete the post with title
+        "{{ instance.title }}" and id {{instance.id}}?</p>
+      <input class="btn btn-primary" type="submit" name="response" value="No">
+      <input class="btn btn-danger" type="submit" name="response" value="Yes">
+    </form>
+  </div>
+</div>
+
+
+
+{% endblock %}

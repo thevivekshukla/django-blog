@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block meta %}
+
+<meta name="description" content="{{ instance.content|truncatechars:160 }}">
+<meta name="author" content="{{ instance.user.username }}">
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class="col-sm-8 col-sm-offset-2">
+  <h1>{{ instance.title|capfirst }}</h1>
+  <small><strong>Updated: </strong>{{ instance.update|timesince }} ago </small>
+  <small><strong> Author: {{ instance.user.username|capfirst }}</strong></small>
+  {% if instance.user == request.user or request.user.is_superuser %}
+  <small><a href="{% url 'posts:post_update' slug=instance.slug %}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></small>
+  <small><a href="{% url 'posts:post_delete' slug=instance.slug %}"><span class="glyphicon glyphicon-trash"></span> Delete</a></small>
+  {% endif %}
+  <br><br>
+  {% if instance.image %}
+  <p><img class="img img-responsive" src="{{ instance.image.url }}" alt=""></p>
+  {% endif %}
+  <br><br>
+  <div class="post-content">{{ instance.get_marked_content }}</div>
+
+  <br><hr>
+
+
+  <div class="comments">
+    <span class="lead"><h2>Comments</h2></span>
+    {% if user.is_authenticated %}
+    <form method="post">
+      {% csrf_token %}
+      {{ comment_form|crispy }}
+      <input class="btn btn-primary" type="submit" value="Comment">
+    </form>
+    {% else %}
+    <p>You must be logged in comment.</p>
+    {% endif %}
+    <br>
+
+    {% if instance.comments %}
+
+    {% for comment in instance.comments %}
+      <blockquote>
+        {{ comment.content }}
+
+        <footer>
+          by <strong>{{ comment.user|capfirst }}</strong>{%if comment.user == instance.user%}<span class="badge">AUTH</span>{%endif%} |
+          {{ comment.timestamp|timesince }} ago |
+          {% if comment.children %}
+          <a class="comment-display-btn" href="#">{{ comment.children.count }} Comment{% if comment.children.count > 1 %}s{%endif%}</a>
+          | {% endif %}
+
+          {% if user.is_authenticated %}
+          <a class="comment-reply-btn" href="#">Reply</a> |
+          {% endif %}
+          <a href="{{ comment.get_absolute_url }}">Thread</a>
+          {% if comment.user == request.user or request.user.is_superuser or comment.content_object.user == request.user %}
+          | <a href="{{ comment.get_delete_url }}">Delete</a>
+          {% endif %}
+        </footer>
+
+        <div class="comment-reply">
+        {% if comment.children %}
+          {% for child_comment in comment.children %}
+            <blockquote>
+              {{ child_comment.content }}
+              <footer>
+                by <strong>{{ child_comment.user|capfirst }}</strong>{%if child_comment.user == instance.user%}<span class="badge">AUTH</span>{%endif%}
+                | {{ child_comment.timestamp|timesince }} ago
+                {% if child_comment.user == request.user or request.user.is_superuser %}
+                | <a href="{{ child_comment.get_delete_url }}">Delete</a>
+                {% endif %}
+              </footer>
+            </blockquote>
+          {% endfor %}
+        {% endif %}
+        </div>
+
+        <div class="comment-reply-form">
+        {% if user.is_authenticated %}
+        <form method="post">
+          {% csrf_token %}
+          {{ comment_form|crispy }}
+          <input type="hidden" name="parent_id" value="{{ comment.id }}">
+          <input class="btn btn-primary" type="submit" value="Reply">
+        </form>
+        {% endif %}
+        </div>
+
+
+      </blockquote>
+    {% endfor %}
+    {% endif %}
+
+  </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block body_extra %}
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+
+    $(".comment-reply-btn").click(function(event){
+      event.preventDefault();
+      $(this).parent().next().next(".comment-reply-form").fadeToggle();
+    });
+
+    $(".comment-display-btn").click(function(event){
+      event.preventDefault();
+      $(this).parent().next(".comment-reply").fadeToggle();
+    });
+  });
+</script>
+
+{% endblock body_extra %}

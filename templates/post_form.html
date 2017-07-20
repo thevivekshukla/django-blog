@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title }} {% endblock %}
+
+{% block head_extra %}{{ form.media }}{% endblock %}
+
+
+{% block body %}
+
+<div class="row">
+
+<div class="col-sm-5 col-sm-offset-0">
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" class="btn btn-primary" value="{{ title }}">
+  </form>
+</div>
+
+
+<div class="col-sm-5 col-sm-offset-1">
+
+  <h1 class="preview-title"></h1>
+  <br><br>
+
+  <p class="preview-content post-content"></p>
+
+</div>
+
+
+</div>
+
+{% endblock body %}
+
+
+{% block body_extra %}
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+
+    title = $("#id_title")
+    content = $("#id_content")
+
+    function setTitle(title) {
+      $(".preview-title").html(title.val());
+    }
+
+    function setContent(content) {
+      markedContent = marked(content.val());
+      $(".preview-content").html(markedContent);
+    }
+
+    setTitle(title);
+    setContent(content);
+
+    title.keyup(function(){
+      setTitle($(this));
+    });
+
+    content.keyup(function(){
+      setContent($(this))
+    });
+  });
+
+</script>
+
+{% endblock body_extra %}

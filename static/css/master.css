@@ -1,0 +1,28 @@
+.alert-error {
+  color: red;
+}
+
+.comment-reply {
+  display: none;
+}
+
+
+.comment-reply-form {
+  display: none;
+}
+
+
+.post-content {
+  font-family: 'PT Serif', serif;
+  font-size: 20px;
+}
+
+.comment-content {
+  font-family: 'Lato', sans-serif;
+  font-size: 22px;
+}
+
+
+.wmd-panel {
+  margin: 0px !important;
+}
