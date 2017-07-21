@@ -1,4 +1,4 @@
-See this code in action [here](https://vivek-blog.herokuapp.com)
+See this code in action [here](http://vivek-blog.herokuapp.com)
 
 # About
 
@@ -25,3 +25,11 @@ If you are beginner then also it would be easier for you to follow up the good.
 * Only one image can be uploaded per post
 * To post comment one must register from the link given in blog
 * Comments can be deleted by the user who posted comment, post author and superuser
+
+
+### Some important links
+
+* [Woking with environment varaibles](https://godjango.com/blog/working-with-environment-variables-in-python/)
+* [Use Amazon S3 to store static and media files](https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/)
+* [Serving static files in django](https://stackoverflow.com/questions/11569144/proper-way-to-handle-static-files-and-templates-for-django-on-heroku)
+* [Deploying django on heroku](https://devcenter.heroku.com/articles/deploying-python)
