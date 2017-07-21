@@ -6,7 +6,7 @@ Django blog is a simple blog, that I have created just for experimentations.
 I was learning django and thought creating a blog would be a good excercise.
 If you are beginner then also it would be easier for you to follow up the good.
 
-# Specifications:
+# Specifications
 * Language: Python3.6, HTML, Javascript
 * Framework: Django, JQuery
 * Database: Postgresql
@@ -14,7 +14,7 @@ If you are beginner then also it would be easier for you to follow up the good.
 * Static and media files hosted on: Amazon S3
 
 
-# Functionaliy
+# Functionality
 
 * Only staff user can post articles
 * User who has created a post can only edit and delete it
