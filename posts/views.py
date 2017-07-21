@@ -203,7 +203,7 @@ def post_draft(request):
 
     context = {
         "objects": objects,
-        "title": "All posts",
+        "title": "All Drafts",
     }
 
     return render(request, "post_list.html", context)
@@ -231,7 +231,7 @@ def post_published(request):
 
     context = {
         "objects": objects,
-        "title": "All posts",
+        "title": "All published posts",
     }
 
     return render(request, "post_list.html", context)
